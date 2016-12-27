@@ -12,15 +12,20 @@ chrome.storage.sync.get(['enabled', 'timeout'], function(items) {
     });
 
     $(function() {
-        var killModals = function() {
+        var moveModals = function() {
             if (enabled) {
-                var modals = $('*').filter(function() {
-                    return $(this).css('position').toLowerCase().indexOf('fixed') > -1;
-                });
-                modals.css('position', 'initial');
+                var resetProperty = function(property, value) {
+                    $('*').each(function() {
+                        if ($(this).css(property).toLowerCase().indexOf(value) > -1) {
+                            this.style.setProperty(property, 'initial', 'important');
+                        }
+                    });
+                };
+                resetProperty('position', 'fixed');
+                resetProperty('overflow', 'hidden');                
             }
-            setTimeout(killModals, timeout);
+            setTimeout(moveModals, timeout);
         }
-        killModals();
+        moveModals();
     });
 });
